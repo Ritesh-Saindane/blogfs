@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Add New Blog</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+    <div class="container py-2">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <h2 class="text-center mb-4">Add Blog</h2>
+              <form
+                method="POST"
+                action="/blog/add-blog"
+                enctype="multipart/form-data"
+              >
+                <!-- Cover Image -->
+                <div class="mb-3">
+                  <label for="coverImage" class="form-label">Cover Image</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="coverImage"
+                    accept="image/*"
+                    name="coverImage"
+                    required
+                  />
+                </div>
+                <!-- Blog Title -->
+                <div class="mb-3">
+                  <label for="blogTitle" class="form-label">Blog Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="blogTitle"
+                    placeholder="Enter blog title"
+                    name="title"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="blogTitle" class="form-label"
+                    >Blog Cover Text
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="coverText"
+                    placeholder="Enter blog title"
+                    name="coverText"
+                  />
+                </div>
+                <!-- Blog Body -->
+                <div class="mb-3">
+                  <label for="blogBody" class="form-label">Blog Content</label>
+                  <textarea
+                    class="form-control"
+                    id="blogBody"
+                    rows="6"
+                    placeholder="Write your blog content here..."
+                    name="body"
+                  ></textarea>
+                </div>
+                <!-- Submit Button -->
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    Submit Blog
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <%- include('./partials/script') %>
+</html>

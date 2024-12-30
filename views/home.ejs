@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <style>
+      a {
+        color: inherit; /* Inherits the text color */
+        text-decoration: none; /* Removes the underline */
+      }
+      a:hover {
+        color: #3c42ea; /* Adds a custom hover color */
+        text-decoration: underline; /* Optional: Adds underline on hover */
+      }
+    </style>
+    <title>HomePage</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+    <div class="container py-3">
+      <% if (allBlogs && allBlogs.length > 0) { %>
+      <h1 class="text-center mb-5">All Blogs</h1>
+      <div class="row g-4">
+        <% allBlogs.forEach(blog => { %>
+        <div class="col-md-6 col-lg-4">
+          <a href="/blog/<%= blog._id %>" class="text-decoration-none">
+            <div
+              class="card h-100 shadow-sm border"
+              style="box-shadow: 0 4px 8px rgba(60, 66, 234, 0.5)"
+            >
+              <img
+                src="<%= blog.coverImageUrl %>"
+                class="card-img-top"
+                alt="<%= blog.title %> Cover Image"
+                style="object-fit: cover; height: 200px; width: 100%"
+              />
+              <div class="card-body">
+                <h5 class="card-title"><%= blog.title %></h5>
+                <p class="card-text"><%= blog.coverText %></p>
+                <a
+                  href="/user/profile/<%= blog.createdBy._id %>"
+                  class="d-flex align-items-center text-reset"
+                  style="text-decoration: none"
+                >
+                  <img
+                    src="<%= blog.createdBy.profileImageUrl %>"
+                    alt="<%= blog.createdBy.fullName %> Avatar"
+                    class="shadow rounded-circle border-2"
+                    style="
+                      width: 50px;
+                      height: 50px;
+                      border-color: rgb(60, 66, 234);
+                    "
+                  />
+                  <strong class="ms-2"><%= blog.createdBy.fullName %></strong>
+                </a>
+                <div
+                  class="d-flex justify-content-between align-items-center mt-3"
+                >
+                  <div>
+                    <span class="text-danger">
+                      <i class="bi bi-heart-fill"></i> <%= blog.noOfLikes.length
+                      %>
+                    </span>
+                    <span class="ms-3 text-muted">
+                      <i class="bi bi-eye-fill"></i> <%= blog.noOfViews %>
+                    </span>
+                  </div>
+                  <a href="/blog/<%= blog._id %>" class="btn btn-primary"
+                    >Read More</a
+                  >
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <% }); %>
+      </div>
+      <% } else { %>
+      <h4 class="text-center m-4">
+        No Posts have been added to the website yet.
+      </h4>
+      <% } %>
+    </div>
+    <%- include('./partials/script') %>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Blog Page</title>
+  </head>
+  <body>
+    <%- include('./partials/navbar') %> <% if (locals.blog) { %>
+    <div class="container my-5">
+      <!-- Blog Title and Author -->
+      <div class="row mt-4">
+        <h1 class="fw-bold text-dark">
+          <span class="text-primary"><%= blog.title %></span>
+        </h1>
+        <a
+          href="/user/profile/<%= blog.createdBy._id %>"
+          style="text-decoration: none"
+          class="col-12"
+        >
+          <div class="border p-3 d-flex align-items-center mt-3">
+            <img
+              src="<%= blog.createdBy.profileImageUrl %>"
+              alt="Author Avatar"
+              class="rounded-circle border border-2 border-light me-3"
+              style="width: 50px; height: 50px"
+            />
+            <div>
+              <p class="mb-0 fw-bold text-dark">
+                <%= blog.createdBy.fullName %>
+              </p>
+              <small class="text-muted">
+                Published on <%= new Date(blog.createdAt).toDateString() %>
+              </small>
+            </div>
+            <div class="ms-auto text-muted d-flex align-items-center">
+              <small class="me-3">
+                <i class="bi bi-eye"></i> <%= blog.noOfViews %> Views
+              </small>
+              <small>
+                <i class="bi bi-clock"></i>
+                <%= new Date(blog.createdAt).toLocaleTimeString() %>
+              </small>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Like and Comment Buttons -->
+      <div class="row mt-4">
+        <div class="col-12 d-flex justify-content-start align-items-center">
+          <!-- Like Button -->
+          <form
+            action="/blog/like/<%= blog._id %>"
+            method="POST"
+            class="d-inline"
+          >
+            <% if (blog.noOfLikes.includes(userDetails?._id)) { %>
+            <button
+              type="submit"
+              class="btn btn-outline-danger me-3 d-flex align-items-center"
+            >
+              <i class="bi bi-heart-fill me-2"></i> <%= blog.noOfLikes.length %>
+              Likes
+            </button>
+            <% } else { %>
+            <button
+              type="submit"
+              class="btn btn-outline-danger me-3 d-flex align-items-center"
+            >
+              <i class="bi bi-heart me-2"></i> <%= blog.noOfLikes.length %>
+              Likes
+            </button>
+            <% } %>
+          </form>
+
+          <button class="btn btn-outline-primary d-flex align-items-center">
+            <a href="#hello" style="text-decoration: none">
+              <i class="bi bi-chat me-2"></i> <%= comments.length %>
+            </a>
+          </button>
+        </div>
+      </div>
+
+      <!-- Blog Cover Image -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <img
+            src="<%= blog.coverImageUrl %>"
+            alt="Blog Cover"
+            class="img-fluid rounded shadow"
+            style="max-height: 400px; width: auto"
+          />
+        </div>
+      </div>
+
+      <!-- Blog Content -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="bg-light p-4 rounded shadow-sm">
+            <pre
+              class="text-dark"
+              style="
+                line-height: 1.8;
+                font-size: 1.1rem;
+                white-space: pre-wrap;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular',
+                  'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+                  sans-serif;
+              "
+            >
+                <%= blog.body %>
+              </pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="container mt-5" id="hello">
+        <h3 class="mb-4">Comments (<%= comments.length %>)</h3>
+
+        <!-- Comment Input Section -->
+        <% if (userDetails) { %>
+        <form action="/blog/comments/<%= blog._id %>" method="POST">
+          <textarea
+            class="form-control"
+            name="content"
+            rows="2"
+            placeholder="Add a comment..."
+            required
+          ></textarea>
+          <button type="submit" class="btn btn-primary mt-2">
+            Post Comment
+          </button>
+        </form>
+        <% } else { %>
+        <p class="alert alert-primary" role="alert">Log in to Post Comments!</p>
+        <% } %>
+
+        <!-- Display Comments -->
+        <% comments.forEach(comment => { %>
+        <div
+          class="comment-container p-3 border rounded m-3"
+          style="background-color: #f9f9f9; max-width: 600px"
+        >
+          <div class="comment-header d-flex align-items-center mb-2">
+            <a href="" style="text-decoration: none"
+              ><img
+                src="<%= comment.createdBy.profileImageUrl %>"
+                alt="Author Avatar"
+                class="rounded-circle border border-2 border-light me-3"
+                style="width: 50px; height: 50px"
+              />
+            </a>
+            <div>
+              <a
+                href="/user/profile/<%=comment.createdBy._id%>"
+                style="text-decoration: none"
+              >
+                <h5 class="m-0" style="font-size: 1.2rem; font-weight: bold">
+                  <%= comment.createdBy.fullName %>
+                </h5>
+              </a>
+
+              <small class="text-muted">
+                Posted on <%= new Date(comment.createdAt).toDateString() %>
+              </small>
+            </div>
+          </div>
+          <div class="comment-body">
+            <p
+              style="
+                font-size: 1rem;
+                background: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+                font-weight: 200;
+              "
+            >
+              <%= comment.content %>
+            </p>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } else { %>
+    <p class="alert alert-danger" role="alert">Blog not found!</p>
+    <% } %> <%- include('./partials/script') %>
+  </body>
+</html>

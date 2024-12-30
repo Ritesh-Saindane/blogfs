@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>HomePage</title>
+    <style>
+      .full-height {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+      }
+      .profile-container {
+        width: 100%;
+        max-width: 900px;
+      }
+      .rounded-circle {
+        border: 4px solid #007bff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .stat-container {
+        margin: 20px 0;
+        font-size: 1.2rem;
+        color: #495057;
+      }
+      .stat-container p {
+        margin-bottom: 8px;
+      }
+      .blog-list-title {
+        margin-top: 20px;
+        color: #007bff;
+        font-weight: bold;
+      }
+      .no-blogs {
+        color: #6c757d;
+        font-size: 1rem;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .list-group-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .list-group-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 15px;
+      }
+      .list-group-item-content {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+      }
+      .list-group-item h5 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #343a40;
+      }
+      .list-group-item small {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+      .list-group-item span {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-left: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+    <div class="container-fluid full-height">
+      <div class="profile-container">
+        <div class="card shadow-lg">
+          <div class="card-header bg-primary text-white text-center">
+            <h4>User Profile</h4>
+          </div>
+          <% if (locals.user) { %>
+          <div class="row g-0">
+            <!-- User Profile Picture and Details -->
+            <div class="col-12 col-md-6 text-center p-4">
+              <img
+                src="<%= user.profileImageUrl %>"
+                alt="Profile Picture"
+                class="rounded-circle mb-3 img-fluid"
+                style="max-width: 200px"
+              />
+              <h5 class="fw-bold">Name: <%= user.fullName %></h5>
+              <p class="text-muted">Email: <%= user.email %></p>
+            </div>
+
+            <!-- User Statistics -->
+            <div class="col-12 col-md-6 p-4">
+              <div class="stat-container">
+                <p><strong>Total Views:</strong> <%= totalViews %></p>
+                <p>
+                  <strong>Total Written Blogs:</strong>
+                  <%= blogs.length || 0 %>
+                </p>
+                <p><strong>Total Likes:</strong> <%= totalLikes %></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Blogs Section -->
+          <div class="p-4">
+            <h5 class="blog-list-title">All Blogs by <%= user.fullName %>:</h5>
+            <% if (locals.blogs && locals.blogs.length > 0) { %> <%
+            blogs.forEach(blog => { %>
+            <div class="list-group-item">
+              <a
+                href="/blog/<%= blog.id %>"
+                style="text-decoration: none"
+                class="col-12"
+              >
+                <img src="<%= blog.coverImageUrl  %>" alt="Blog Thumbnail" />
+                <div class="list-group-item-content">
+                  <h5><%= blog.title %></h5>
+
+                  <div>
+                    <small
+                      ><%= new Date(blog.createdAt).toLocaleDateString()
+                      %></small
+                    >
+                    Likes: <%= blog.noOfLikes.length %> | Views: <%=
+                    blog.noOfViews %>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <% }) %> <% } else { %>
+            <p class="no-blogs">This user has not written any blogs yet.</p>
+            <% } %>
+          </div>
+          <% } else { %>
+          <h4 class="text-center text-danger m-4">404: URL Not Found!</h4>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/script') %>
+  </body>
+</html>
